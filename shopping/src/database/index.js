@@ -1,4 +1,3 @@
-module.exports={
-    databaseConnection: require('./connection'),
-    ShoppingRepository:require('./repository/shopping-repository')
-}
+export * from './connection.js'
+export * from './repository/shopping-repository.js'
+

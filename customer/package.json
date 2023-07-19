@@ -2,10 +2,10 @@
   "name": "customer",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production nodemon src/index.js",
-    "dev": "NODE_ENV=dev nodemon src/index.js"
+    "start": "nodemon src/index.js"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +21,9 @@
     "winston": "^3.9.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.22.9",
+    "@babel/node": "^7.22.6",
+    "@babel/preset-env": "^7.22.9",
     "nodemon": "^2.0.22"
   }
 }

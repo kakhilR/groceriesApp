@@ -1,8 +1,7 @@
-import { UserAuth } from '../middleware/auth';
-import { UserService } from '../services/user-service';
+import { userAuth } from '../middlewares/auth.js';
+import { UserService } from '../services/user-service.js';
 
-
-module.exports = (app)=>{
+export const userApiServices = (app)=>{
     const service = new UserService();
 
     app.post('/signup', async (req,res,next) => {
@@ -12,7 +11,7 @@ module.exports = (app)=>{
 
     });
 
-    app.post('/login',  async (req,res,next) => {
+    app.post('/signin',  async (req,res,next) => {
         
         const { email, password } = req.body;
 
@@ -35,7 +34,7 @@ module.exports = (app)=>{
 
     // });
 
-    app.get('/profile', UserAuth ,async (req,res,next) => {
+    app.get('/profile', userAuth ,async (req,res,next) => {
 
         const { _id } = req.user;
         const { data } = await service.GetProfile({ _id });
@@ -43,14 +42,14 @@ module.exports = (app)=>{
     });
      
 
-    app.get('/shoping-details', UserAuth, async (req,res,next) => {
+    app.get('/shoping-details', userAuth, async (req,res,next) => {
         const { _id } = req.user;
        const { data } = await service.GetShoppingDetails(_id);
 
        return res.json(data);
     });
     
-    app.get('/wishlist', UserAuth, async (req,res,next) => {
+    app.get('/wishlist', userAuth, async (req,res,next) => {
         const { _id } = req.user;
         const { data } = await service.GetWishList( _id);
         return res.status(200).json(data);

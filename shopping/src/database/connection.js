@@ -1,9 +1,10 @@
-const mongoose = request('mongoose');
-const {DB_URL} = require('../config');
+import mongoose from 'mongoose';
 
-module.export = async()=>{
+import { configurations } from '../config/index.js';
+
+export const databaseConnection = async()=>{
     try{
-        await mongoose.connect(DB_URL,{
+        await mongoose.connect(configurations.DB_URL,{
             useNewUrlParser: true,
             useUnifiedTopology:true,
         });

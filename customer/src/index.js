@@ -1,13 +1,31 @@
+import cors from 'cors';
 import express from 'express';
+import { expressApp } from './app.js';
+import { databaseConnection } from './database/connection.js';
 
+const StartServer = async ()=>{
+    const app = express();
 
-const app = express();
-app.use(express.json());
+    app.use(express.json());
+    app.use(express.urlencoded());
+    app.use(cors());
+    // app.use(express.static(path.join(__dirname, '/public')))
 
-app.use('/', (req,res,next)=>{
-    return res.status(200).json("hello from customer")
-})
+    await databaseConnection();
 
-app.listen(8001, ()=>{
-    console.log('listening on 8001')
-})
+    await expressApp(app);
+    
+
+    app.use('/', (req, res)=>{
+        return res.send("Hello World customers")
+    });
+    
+    app.listen(8001, ()=>{
+        console.log('listening on 8001 customer')
+    }).on('error',(err)=>{
+        console.log(err);
+        process.exit();
+    });
+}
+
+StartServer();

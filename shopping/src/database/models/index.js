@@ -1,4 +1,3 @@
-module.exports = {
-    CartModel:require('./Cart'),
-    OrderModel:require('./Order')
-}
+export * from './Cart.js';
+export * from './Order.js';
+

@@ -1,7 +1,7 @@
-import { UserRepository } from '../database';
-import { FormateData, GenerateSignature, ValidatePassword } from '../utils';
+import { UserRepository } from '../database/repository/user-repository.js';
+import { FormateData, GeneratePassword, GenerateSalt, GenerateSignature, ValidatePassword } from '../utils/index.js';
 
-class UserService {
+export class UserService {
 
     constructor(){
         //  here we are creating the instance of user repository
@@ -17,13 +17,14 @@ class UserService {
             const validPassword = await   ValidatePassword(password, existingUser.password,existingUser.salt);
             if(validPassword){
                 const token = await GenerateSignature({ email:existingUser.email, _id: existingUser._id})
+                console.log(token,"token");
                 return FormateData({id:existingUser._id,token});
             }
         }
         return FormateData(null);
     }
 
-    async Signup(userInput){
+    async SignUp(userInput){
         const { email, password, phone } = userInput;
 
         let salt = await GenerateSalt();
@@ -64,14 +65,14 @@ class UserService {
     }
 
     async ManageOrder(userId, order){
-        const order = await this.repository.AddOrderToProfile(userId, order);
-        return FormateData(order);
+        const _order = await this.repository.AddOrderToProfile(userId, order);
+        return FormateData(_order);
     }
 
 //  this subscribe event is a kind of function which is going to take care
-// the communication with other services 
+// the communication with other services
 // other services will call our customer service then customer service will perform some kind of operations with help of maybe http call or webhook
-    async SubscribeEvents(){
+    async SubscribeEvents(payload){
         const {event, data} = payload;
 
         const { userId, product, order, qty } = data;
@@ -90,12 +91,11 @@ class UserService {
             case 'CREATE_ORDER':
                 this.ManageOrder(userId,order);
                 break;
+            case 'TEST':
+                console.log("from subscriber events");
+                break;
             default:
                 break;
-                
         }
     }
 }
-
-
-module.exports = UserService;

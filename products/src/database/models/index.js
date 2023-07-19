@@ -1,3 +1,2 @@
-module.export={
-    ProductModel : require('./Product')
-}
+export * from './Product.js';
+

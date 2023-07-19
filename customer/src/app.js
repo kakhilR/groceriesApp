@@ -1,18 +1,17 @@
 import cors from 'cors';
 import express from 'express';
-import { appEvents, user } from './routes';
+import { appEvents, userApiServices } from './routes/index.js';
 
-module.exports = async (app)=>{
+export const expressApp = async (app)=>{
     app.use(express.json());
     app.use(express.urlencoded());
     app.use(cors());
-    app.use(express.static(path.join(__dirname, '/public')))
+    // app.use(express.static(path.join(__dirname, '/public')))
 
     //  Listen to Events
     appEvents(app);
     
     // api
-    user(app);
-
+    userApiServices(app);
 
 }

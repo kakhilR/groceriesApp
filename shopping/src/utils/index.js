@@ -1,3 +1,4 @@
+import axios from 'axios';
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -50,15 +51,14 @@ export const FormateData = (data) => {
   }
 };
 
-
-export const PublishUserEvents= async (payload)=>{
-  axios.post('http://localhost:8000/customer/app-events',{
-    payload
-  })
+export const PublishUserEvent = async(payload) =>{
+    axios.post('http://localhost:8000/customer/app-events',{
+        payload
+    })
 }
 
-export const PublishShoppingEvents= async (payload)=>{
-  axios.post('http://localhost:8000/shopping/app-events',{
-    payload
-  })
+export const PublishShoppingEvent = async(payload) =>{
+    axios.post('http://localhost:8000/shopping/app-events',{
+        payload
+    })
 }

@@ -1,13 +1,13 @@
-import { UserService } from '../services/user-service';
+import { UserService } from '../services/user-service.js';
 
 
 //  simple we are exposing one webhook to other service so other service 
 // can directly call to our service by putting our base url (localhost:8080/customer/app-events) if ur call customer service from other service
-module.exports = (app)=>{
+export const appEvents = (app)=>{
     const service = new UserService();
 
     app.use('/app-events',async (req,res,next)=>{
-        const {payload} = req.body;
+        const { payload } = req.body;
 
         service.SubscribeEvents(payload);
         console.log("shopping service received events");

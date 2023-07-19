@@ -1,6 +1,6 @@
-import { AddressModel, UserModel } from '../models';
+import { AddressModel, UserModel } from '../models/index.js';
 
-class UserRepository{
+export class UserRepository{
     async CreateUser({email,password,phone,salt}){
         const user = new UserModel({email,password,phone,salt,address:[]})
         const _user = await user.save();
@@ -16,8 +16,8 @@ class UserRepository{
         }
     }
 
-    async FindUser({email}){
-        const existingUser = new UserModel.findOne({email:email});
+    async FindUser({id}){
+        const existingUser = await UserModel.findById({_id:id});
         return existingUser;
     }
 
@@ -112,5 +112,3 @@ class UserRepository{
     }
 
 }
-
-module.exports = UserRepository;

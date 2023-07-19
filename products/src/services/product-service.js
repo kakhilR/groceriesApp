@@ -1,8 +1,8 @@
-import { ProductRepository } from '../repositories/product-repository';
-import { FormateData } from '../utils';
+import { ProductRepository } from '../database/index.js';
+import { FormateData } from '../utils/index.js';
 
 
-class ProductService {
+export class ProductService {
     constructor(){
         this.repository = new ProductRepository();
     }
@@ -58,8 +58,5 @@ class ProductService {
        }else{
            return FormateData({error: 'No product Available'});
        }
-
    }
 }
-
-module.exports = ProductService;

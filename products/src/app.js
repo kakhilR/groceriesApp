@@ -1,16 +1,17 @@
 import cors from 'cors';
 import express from 'express';
-import { appEvents, products } from './routes';
+import { productApiServices } from './routes/index.js';
 
-module.exports = async (app) =>{
+export const expressApp = async (app) =>{
     app.use(express.json());
     app.use(express.urlencoded());
     app.use(cors());
-    app.use(express.static(path.join(__dirname, '/public')));
+    // app.use(express.static(path.join(__dirname, '/public')));
 
     // events Listener
-    appEvents(app);
+    // appEvents(app);
     
-    products(app);
-    
+    productApiServices(app);
+
+    // app.use()
 }

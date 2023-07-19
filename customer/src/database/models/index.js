@@ -1,4 +1,3 @@
-module.export={
-    UserModel:require('./User'),
-    AddressModel:require('./Address'),
-}
+export * from './Address.js';
+export * from './User.js';
+

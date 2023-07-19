@@ -1,4 +1,2 @@
-module.exports = {
-    databaseConnection: require('./connection'),
-    UserRepository: require('./repository/user')
-}
+// export const UserRepository = require('./repository/user');
+// export const databaseConnection = require('./connection.js');

@@ -1,4 +1,3 @@
-module.exports = {
-    customer: require('./user'),
-    appEvents: require('./app-events')
-}
+
+export * from './app-events.js';
+export * from "./user.js";

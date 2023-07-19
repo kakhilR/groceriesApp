@@ -8,7 +8,7 @@ const UserSchema = new Schema({
     phone:String,
     address:[
         {
-            type: Schema.type.ObjectId, ref:'address', require: true
+            type: Schema.Types.ObjectId, ref:'address', require: true
         }
     ],
     cart:[{
@@ -39,4 +39,4 @@ const UserSchema = new Schema({
     ]
 },{timestamps:true});
 
-module.exports = mongoose.model('user',UserSchema);
+export const UserModel = mongoose.model('user',UserSchema);

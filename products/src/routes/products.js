@@ -1,10 +1,11 @@
-import { ProductService } from '../services/product-service';
+import { userAuth } from '../middlewares/auth.js';
+import { ProductService } from '../services/index.js';
 
-module.exports = (app, channel) => {
+export const productApiServices = (app) => {
     const service = new ProductService();
   
     app.post("/product/create", async (req, res, next) => {
-      const { name, desc, type, unit, price, available, suplier, banner } =
+      const { name, desc, type, unit, price, available, supplier, banner } =
         req.body;
       // validation
       const { data } = await service.CreateProduct({
@@ -14,7 +15,7 @@ module.exports = (app, channel) => {
         unit,
         price,
         available,
-        suplier,
+        supplier,
         banner,
       });
       return res.json(data);
@@ -42,17 +43,10 @@ module.exports = (app, channel) => {
       }
     });
   
-    app.post("/ids", async (req, res, next) => {
-      const { ids } = req.body;
-      const products = await service.GetSelectedProducts(ids);
-      return res.status(200).json(products);
-    });
-  
-    
-    // app.get("/whoami", (req, res, next) => {
-    //   return res
-    //     .status(200)
-    //     .json({ msg: "/ or /products : I am products Service" });
+    // app.post("/:id", async (req, res, next) => {
+    //   const { ids } = req.body;
+    //   const products = await service.GetSelectedProducts(ids);
+    //   return res.status(200).json(products);
     // });
   
     //get Top products and category
@@ -66,7 +60,7 @@ module.exports = (app, channel) => {
       }
     });
 
-    app.put('/wishlist', UserAuth, async (req,res,next)=>{
+    app.put('/wishlist', userAuth, async (req,res,next)=>{
       const { _id } = req.user;
       
       try{
@@ -77,19 +71,19 @@ module.exports = (app, channel) => {
       }catch(error){return res.json(error)}
     })
 
-    app.delete('/wishlist/:id',UserAuth,async (req,res,next)=>{
-      const {_id} = req.user;
-      const productId = req.params.id;
-      try{
-        const { data } = await service.GetProductPayload(_id, { productId }, 'REMOVE_FORM_WISHLIST')
-        PublishUserEvent(data);
-        return res.status(200).json(data.data.product);
-      }catch(error){
-        return res.json(error);
-      }
-    })
+    // app.delete('/wishlist/:id',userAuth,async (req,res,next)=>{
+    //   const {_id} = req.user;
+    //   const productId = req.params.id;
+    //   try{
+    //     const { data } = await service.GetProductPayload(_id, { productId }, 'REMOVE_FORM_WISHLIST')
+    //     PublishUserEvent(data);
+    //     return res.status(200).json(data.data.product);
+    //   }catch(error){
+    //     return res.json(error);
+    //   }
+    // })
 
-    app.put('/cart', UserAuth, async (req,res,next)=>{
+    app.put('/cart', userAuth, async (req,res,next)=>{
       const {_id} =req.user;
       try{
         const {data} = await service.GetProductPayload(_id, {productId: req.body._id, qty:req.body.qty},'ADD_TO_CART')
@@ -107,24 +101,24 @@ module.exports = (app, channel) => {
       }
     })
 
-    app.delete('/cart/:id',UserAuth,async (req,res,next)=>{
-      const {_id}= req.user;
-      const productId = req.params.id;
+    // app.delete('/cart/:id',userAuth,async (req,res,next)=>{
+    //   const {_id}= req.user;
+    //   const productId = req.params.id;
 
-      try{
-        const {data} = await service.GetProductPayload(_id, {productId},'REMOVE_FROM_CART');
-        PublishUserEvent(data);
-        PublishShoppingEvent(data);
-        const response = {
-          product:data.data.product,
-          unit:data.data.qty
-        }
+    //   try{
+    //     const {data} = await service.GetProductPayload(_id, {productId},'REMOVE_FROM_CART');
+    //     PublishUserEvent(data);
+    //     PublishShoppingEvent(data);
+    //     const response = {
+    //       product:data.data.product,
+    //       unit:data.data.qty
+    //     }
 
-        return res.status(200).json(response);
+    //     return res.status(200).json(response);
 
-      }catch(error){
-        return res.status(400).json(error)
-      }
-    })
+    //   }catch(error){
+    //     return res.status(400).json(error)
+    //   }
+    // })
 
 };

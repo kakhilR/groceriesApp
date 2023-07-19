@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const CartSchema = new Schema({
     customerId: { type: String },
     items: [
-        {   
+        {
             product: {
                 _id: { type: String, require: true},
                 name: { type: String },
@@ -16,9 +16,9 @@ const CartSchema = new Schema({
                 price: { type: Number },
                 suplier: { type: String },
             } ,
-            unit: { type: Number, require: true} 
+            unit: { type: Number, require: true}
         }
     ]
 });
 
-module.exports =  mongoose.model('cart', CartSchema);
+export const CartModel =  mongoose.model('cart', CartSchema);

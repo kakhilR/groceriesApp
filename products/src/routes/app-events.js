@@ -1,4 +1,4 @@
-module.exports = (app) => {
+export const appEvents = (app) => {
     
     app.use('/app-events',async (req,res,next) => {
 
@@ -8,7 +8,6 @@ module.exports = (app) => {
         console.log(payload);
 
         return res.status(200).json({ message: 'notified!'});
- 
     });
 
 }

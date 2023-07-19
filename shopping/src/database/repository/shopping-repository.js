@@ -1,86 +1,115 @@
-import { CartModel, OrderModel } from "../models";
+import { CartModel, OrderModel } from '../models/index.js';
+// const { v4: uuidv4 } = require('uuid');
 
-class ShoppingRepository {
+//Dealing with data base operations
+export class ShoppingRepository {
 
-    async Orders(userId){
-        const orders = await OrderModel.find({userId: userId});
+    async Orders(customerId){
+
+        const orders = await OrderModel.find({customerId });
+        
         return orders;
+
     }
 
-    async Cart(userId){
-        const cartItems = await CartModel.find({userId: userId});
+    async Cart(customerId){
+
+        const cartItems = await CartModel.find({ customerId: customerId });
+
 
         if(cartItems){
             return cartItems;
         }
 
-        throw new Error('Data Not found');
+        throw new Error('Data Not found!');
     }
 
-    async AddCartItem(userId,item,qty,isRemove){
-        const cart = await CartModel.findOne({userId:userId});
+    async AddCartItem(customerId,item,qty,isRemove){
+ 
+            // return await CartModel.deleteMany();
+ 
+            const cart = await CartModel.findOne({ customerId: customerId })
 
-        const {_id} = item;
+            const { _id } = item;
 
-        if(cart){
-            let cartItems = cart.items;
+            if(cart){
+                
+                let isExist = false;
 
-            let isExist = false;
+                let cartItems = cart.items;
 
-            if(cartItems.length>0){
-                cartItems.map(item=>{
-                    if(item.product._id.toString() === _id.toString()){
-                        if(isRemove){
-                            cartItems.splice(cartItems.indexOf(item),1);
-                        }else{
-                            item.unit = qty;
+
+                if(cartItems.length > 0){
+
+                    cartItems.map(item => {
+                                                
+                        if(item.product._id.toString() === _id.toString()){
+                            if(isRemove){
+                                cartItems.splice(cartItems.indexOf(item), 1);
+                             }else{
+                               item.unit = qty;
+                            }
+                             isExist = true;
                         }
-                        isExist = true;
-                    }
+                    });
+                } 
+                
+                if(!isExist && !isRemove){
+                    cartItems.push({product: { ...item}, unit: qty });
+                }
+
+                cart.items = cartItems;
+
+                return await cart.save()
+ 
+            }else{
+
+               return await CartModel.create({
+                    customerId,
+                    items:[{product: { ...item}, unit: qty }]
                 })
             }
 
-            if(!isExist && !isRemove){
-                cartItems.push({product:{...item}, unit:qty});
-            }
-
-            cart.items = cartItems;
-
-            return await cart.save();
-        }else{
-            return  await CartModel.create({
-                userId,
-                items:[{ products:{...item}, unit:qty}]
-            })
-        }
+        
     }
+ 
+    async CreateNewOrder(customerId, txnId){
 
-    async CreateNewOrder(userId, txnId){
-        const cart = await CartModel.findOne({ userId: userId});
+        //required to verify payment through TxnId
 
-        if(cart){
+        const cart = await CartModel.findOne({ customerId: customerId })
 
-            let amount =0;
+        if(cart){         
+            
+            let amount = 0;   
 
             let cartItems = cart.items;
-            if(cartItems.length>0){
-                cartItems.map(item=>{
-                    amount += parseInt(item.product.price) * parseInt(item.unit);
+
+            if(cartItems.length > 0){
+                //process Order
+                
+                cartItems.map(item => {
+                    amount += parseInt(item.product.price) *  parseInt(item.unit);   
+                });
+    
+                const orderId = uuidv4();
+    
+                const order = new OrderModel({
+                    orderId,
+                    customerId,
+                    amount,
+                    status: 'received',
+                    items: cartItems
                 })
-
-                const orderId = uuid4();
-
-                const order = new OrderModel({ orderId, userId, amount, status:'received', items:cartItems})
-
+    
                 cart.items = [];
-
-                const _order= await order.save();
+                
+                const orderResult = await order.save();
                 await cart.save();
-                return _order;
+                return orderResult;
             }
         }
-        return {};
+        return {}
     }
-}
 
-module.exports = ShoppingRepository;
+}
