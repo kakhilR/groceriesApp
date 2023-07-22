@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import { expressApp } from './app.js';
 import { databaseConnection } from './database/connection.js';
+import { createChannel } from './utils/index.js';
 
 const StartServer = async ()=>{
     const app = express();
@@ -13,12 +14,14 @@ const StartServer = async ()=>{
 
     await databaseConnection();
 
-    await expressApp(app);
+    const channel = await createChannel();
+
+    await expressApp(app, channel);
     console.log("from here");
     
-    app.get('/', (req, res)=>{
-        return res.send("Hello World products")
-    });
+    // app.use('/', (req, res)=>{
+    //     return res.send("Hello World products")
+    // });
     
     app.listen(8002, ()=>{
         console.log('listening on 8002 products')

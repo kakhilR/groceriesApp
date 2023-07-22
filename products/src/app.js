@@ -2,7 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import { productApiServices } from './routes/index.js';
 
-export const expressApp = async (app) =>{
+export const expressApp = async (app, channel) =>{
     app.use(express.json());
     app.use(express.urlencoded());
     app.use(cors());
@@ -11,7 +11,7 @@ export const expressApp = async (app) =>{
     // events Listener
     // appEvents(app);
     
-    productApiServices(app);
+    productApiServices(app, channel);
 
     // app.use()
 }

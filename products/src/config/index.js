@@ -14,10 +14,12 @@ const configurations = {
     DB_URL:process.env.MONGODB_URI,
     APP_SECRET:process.env.APP_SECRET,
     BASE_URL:process.env.BASE_URL,
-    EXCHANGE_NAME:process.env.EXCHANGE_NAME,
-    CUSTOMER_SERVICE: "customer_service",
-    SHOPPING_SERVICE: "shopping_service",
+    MESSAGE_BROKER_URL:process.env.MESSAGE_BROKER_URL,
+    EXCHANGE_NAME:'ONLINE_SHOPPING',
+    CUSTOMER_BINDING_KEY: 'CUSTOMER_SERVICE',
+    SHOPPING_BINDING_KEY: 'SHOPPING_SERVICE',
 
 }
 
 export { configurations };
+

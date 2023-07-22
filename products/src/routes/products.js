@@ -1,7 +1,10 @@
+import { configurations } from '../config/index.js';
 import { userAuth } from '../middlewares/auth.js';
 import { ProductService } from '../services/index.js';
+import { publishMessage } from '../utils/index.js';
 
-export const productApiServices = (app) => {
+
+export const productApiServices = (app, channel) => {
     const service = new ProductService();
   
     app.post("/product/create", async (req, res, next) => {
@@ -50,22 +53,24 @@ export const productApiServices = (app) => {
     // });
   
     //get Top products and category
-    app.get("/", async (req, res, next) => {
+    app.get("/",userAuth, async (req, res, next) => {
       //check validation
       try {
+        console.log("from get product")
         const { data } = await service.GetProducts();
         return res.status(200).json(data);
       } catch (error) {
         return res.status(404).json({ error });
       }
-    });
+    })
 
     app.put('/wishlist', userAuth, async (req,res,next)=>{
       const { _id } = req.user;
       
       try{
-        const {data} = await service.GetProductPayload(_is,{productId: req.body._id},'ADD_TO_WISHLIST')
-        PublishUserEvent(data);
+        const {data} = await service.GetProductPayload(_id,{productId: req.body._id},'ADD_TO_WISHLIST')
+        // PublishUserEvent(data);
+        publishMessage(channel, configurations.CUSTOMER_BINDING_KEY,JSON.stringify(data));
     
         return res.status(200).json(data.data.product)
       }catch(error){return res.json(error)}
@@ -88,8 +93,11 @@ export const productApiServices = (app) => {
       try{
         const {data} = await service.GetProductPayload(_id, {productId: req.body._id, qty:req.body.qty},'ADD_TO_CART')
 
-        PublishUserEvent(data);
-        PublishShoppingEvent(data);
+        // PublishUserEvent(data);
+        publishMessage(channel, configurations.CUSTOMER_BINDING_KEY,JSON.stringify(data));
+        // PublishShoppingEvent(data);
+        publishMessage(channel, configurations.SHOPPING_BINDING_KEY,JSON.stringify(data));
+
         const response = {
           product:data.data.product,
           unit:data.data.qty

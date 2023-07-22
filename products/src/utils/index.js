@@ -1,4 +1,4 @@
-import amqplib from "amqplib";
+import amqplib from 'amqplib';
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -71,7 +71,9 @@ export const FormateData = (data) => {
 export const createChannel = async () =>{
   try{
     const connection = await amqplib.connect(configurations.MESSAGE_BROKER_URL);
+    // channel, which is where most of the API for getting things done resides
     const channel = await connection.createChannel();
+    // the assertExchange is a kind of distributor which is distributing our message between queues it depends on certain configurations
     await channel.assertExchange(configurations.EXCHANGE_NAME,'direct',false);
     return channel;
   }catch(e){
@@ -79,17 +81,18 @@ export const createChannel = async () =>{
   }
 }
 
-
+// producer
 export const publishMessage = async (channel, binding_key, message) => {
   try{
     await channel.publish(configurations.EXCHANGE_NAME, binding_key, Buffer.from(message));
+    console.log('from publisher(products)', message)
   }catch(e){
     throw e;
   }
 }
 
-
-export const subscribeMessage = async (channel, service) =>{
+// consumer
+export const subscribeMessage = async (channel, service, binding_key) =>{
   try{
     const appQueue = await channel.assertQueue(configurations.QUEUE_NAME);
     channel.bindQueue(appQueue.queue, configurations.EXCHANGE_NAME, binding_key);

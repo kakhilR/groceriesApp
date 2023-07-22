@@ -8,7 +8,7 @@ export class ProductService {
     }
 
     async CreateProduct(productInputs){
-        const product = await this.repository.createProduct(productInputs);
+        const product = await this.repository.CreateProduct(productInputs);
         return FormateData(product);
     }
 
