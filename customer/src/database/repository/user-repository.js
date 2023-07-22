@@ -16,13 +16,18 @@ export class UserRepository{
         }
     }
 
-    async FindUser({id}){
-        const existingUser = await UserModel.findById({_id:id});
+    async FindUser({email}){
+        const existingUser = await UserModel.findOne({email:email});
         return existingUser;
     }
 
+    // async FindUserProfile({id}){
+    //     const existingUser = await UserModel.findBY({id});
+    //     return existingUser;
+    // }
+
     async FindUserById({id}){
-        const existingUser = new UserModel.findOne(id).populate('address');
+        const existingUser = await UserModel.findOne(id).populate('address');
         return existingUser;
     }
      async WishList(userId){

@@ -2,6 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import { expressApp } from './app.js';
 import { databaseConnection } from './database/connection.js';
+import { createChannel } from './utils/index.js';
 
 const StartServer = async ()=>{
     const app = express();
@@ -13,7 +14,10 @@ const StartServer = async ()=>{
 
     await databaseConnection();
 
-    await expressApp(app);
+    const channel = await createChannel(app);
+
+
+    await expressApp(app, channel);
     
 
     app.use('/', (req, res)=>{

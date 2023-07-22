@@ -37,7 +37,7 @@ export class UserService {
     }
 
     async GetProfile(id){
-        const existingUser = await this.repository.FindUser({id});
+        const existingUser = await this.repository.FindUserById({id});
         return FormateData(existingUser);
     }
 
@@ -73,6 +73,7 @@ export class UserService {
 // the communication with other services
 // other services will call our customer service then customer service will perform some kind of operations with help of maybe http call or webhook
     async SubscribeEvents(payload){
+        payload = JSON.parse(payload);
         const {event, data} = payload;
 
         const { userId, product, order, qty } = data;

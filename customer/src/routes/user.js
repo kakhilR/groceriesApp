@@ -1,8 +1,11 @@
 import { userAuth } from '../middlewares/auth.js';
 import { UserService } from '../services/user-service.js';
+import { subscribeMessage } from '../utils/index.js';
 
-export const userApiServices = (app)=>{
+export const userApiServices = (app, channel)=>{
     const service = new UserService();
+
+    subscribeMessage(channel, service);
 
     app.post('/signup', async (req,res,next) => {
         const { email, password, phone } = req.body;
@@ -37,6 +40,7 @@ export const userApiServices = (app)=>{
     app.get('/profile', userAuth ,async (req,res,next) => {
 
         const { _id } = req.user;
+        console.log(_id,"from customer")
         const { data } = await service.GetProfile({ _id });
         res.json(data);
     });
