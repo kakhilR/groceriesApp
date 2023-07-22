@@ -2,7 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import { shopping } from './routes/index.js';
 
-export const expressApp = async (app) => {
+export const expressApp = async (app, channel) => {
 
     app.use(express.json());
     app.use(cors());
@@ -12,7 +12,7 @@ export const expressApp = async (app) => {
     // appEvents(app);
 
 
-    shopping(app);
+    shopping(app, channel);
     // error handling
     
 }

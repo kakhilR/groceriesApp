@@ -1,4 +1,4 @@
-import axios from 'axios';
+import amqplib from 'amqplib';
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -51,14 +51,42 @@ export const FormateData = (data) => {
   }
 };
 
-export const PublishUserEvent = async(payload) =>{
-    axios.post('http://localhost:8000/customer/app-events',{
-        payload
-    })
+export const createChannel = async () =>{
+  try{
+    const connection = await amqplib.connect(configurations.MESSAGE_BROKER_URL);
+    // channel, which is where most of the API for getting things done resides
+    const channel = await connection.createChannel();
+    // the assertExchange is a kind of distributor which is distributing our message between queues it depends on certain configurations
+    await channel.assertExchange(configurations.EXCHANGE_NAME,'direct',false);
+    return channel;
+  }catch(e){
+    throw e;
+  }
 }
 
-export const PublishShoppingEvent = async(payload) =>{
-    axios.post('http://localhost:8000/shopping/app-events',{
-        payload
+// producer
+export const publishMessage = async (channel, binding_key, message) => {
+  try{
+    await channel.publish(configurations.EXCHANGE_NAME, binding_key, Buffer.from(message));
+    console.log('*********Message has been sent *********', message);
+  }catch(e){
+    throw e;
+  }
+}
+
+// consumer
+export const subscribeMessage = async (channel, service) =>{
+  try{
+    const appQueue = await channel.assertQueue(configurations.QUEUE_NAME);
+    channel.bindQueue(appQueue.queue, configurations.EXCHANGE_NAME, configurations.SHOPPING_BINDING_KEY);
+
+    channel.consume(appQueue.queue,data =>{
+      console.log('received data is shopping');
+      service.SubscribeEvents(data.content.toString())
+      console.log(data.content.toString());
+      channel.ack(data);
     })
+  }catch(e){
+    throw e;
+  }
 }

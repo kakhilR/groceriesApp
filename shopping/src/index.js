@@ -1,13 +1,16 @@
 import express from 'express';
 import { expressApp } from './app.js';
 import { databaseConnection } from './database/index.js';
+import { createChannel } from './utils/index.js';
 
 const StartServer = async ()=>{
     const app = express();
 
     await databaseConnection();
 
-    await expressApp(app);
+    const channel = await createChannel();
+
+    await expressApp(app,channel);
 
     app.use('/', (req,res,next)=>{
         return res.status(200).json("hello from shopping")

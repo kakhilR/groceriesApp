@@ -1,11 +1,12 @@
 import { userAuth } from '../middleware/auth.js';
 import { ShoppingService } from '../services/shopping-services.js';
-import { PublishUserEvent } from '../utils/index.js';
+import { publishMessage, subscribeMessage } from '../utils/index.js';
 
+import { configurations } from '../config/index.js';
 
-export const shopping = (app) =>{
+export const shopping = (app, channel) =>{
     const service = new ShoppingService();
-
+    subscribeMessage(channel,service);
 
     app.post('/order',userAuth, async (req, res, next) =>{
         const { _id } = req.user;
@@ -15,11 +16,12 @@ export const shopping = (app) =>{
 
         const payload = await service.GetOrderPayload(_id, data,'CREATE_ORDER');
 
-        PublishUserEvent(payload);
-
+        // PublishUserEvent(payload);
+        publishMessage(channel, configurations.CUSTOMER_BINDING_KEY, JSON.stringify(payload));
+        
         return res.status(200).json(data);
         
-    })
+    });
 
     app.get('/orders',userAuth, async (req, res, next) =>{
         const {_id} = req.user;

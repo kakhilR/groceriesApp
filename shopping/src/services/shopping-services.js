@@ -41,9 +41,25 @@ export class ShoppingService {
         return FormateData(cartResult);
     }
 
+    async GetOrderPayload(userId,order,event){
+
+        if(order){
+             const payload = {
+                event: event,
+                data: { userId, order }
+            };
+ 
+             return payload
+        }else{
+            return FormateData({error: 'No Order Available'});
+        }
+ 
+    }
+ 
+
 
     async SubscribeEvents(payload){
-
+        payload = JSON.parse(payload);
         payload = JSON.parse(payload);
         const { event, data } = payload;
         const { userId, product, qty } = data;
@@ -60,21 +76,4 @@ export class ShoppingService {
         }
 
     }
-
-
-    async GetOrderPayload(userId,order,event){
-
-       if(order){
-            const payload = {
-               event: event,
-               data: { userId, order }
-           };
-
-            return payload
-       }else{
-           return FormateData({error: 'No Order Available'});
-       }
-
-   }
-
 }
