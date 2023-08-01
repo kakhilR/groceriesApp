@@ -2,7 +2,7 @@ import amqplib from 'amqplib';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-    import { configurations } from '../config/index.js';
+import { configurations } from '../config/index.js';
 
 
 export const GenerateSalt = async ()=>{
