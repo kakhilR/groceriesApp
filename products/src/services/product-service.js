@@ -44,19 +44,19 @@ export class ProductService {
         return FormateData(products);
     }
 
-    async GetProductPayload(userId,{ productId, qty },event){
+    async GetProductPayload(customerId,{ productId, qty },event){
 
         const product = await this.repository.FindById(productId);
-
-       if(product){
+        console.log(product,"from getproductpayload")
+        try{
             const payload = {
-               event: event,
-               data: { userId, product, qty}
-           };
-
-            return FormateData(payload)
-       }else{
-           return FormateData({error: 'No product Available'});
-       }
+                event: event,
+                data: { customerId, product, qty}
+            };
+            console.log(payload,"payload")
+             return FormateData(payload)
+        }catch(e){
+            return e;
+        }
    }
 }

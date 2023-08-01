@@ -30,16 +30,17 @@ export class UserRepository{
         const existingUser = await UserModel.findOne(id).populate('address');
         return existingUser;
     }
-     async WishList(userId){
-        const profile = await UserModel.findById(userId).populate('wishlist');
+     async WishList(customerId){
+        const profile = await UserModel.findById(customerId).populate('wishlist');
         return profile.wishlist;
      }
 
-     async AddWishList(userId,{_id,name,desc,price,available,banner}){
+     async AddWishList(customerId,{_id,name,desc,price,available,banner}){
         const product = {
             _id, name,desc,price,available,banner
         }
-        const profile = await UserModel.findById(userId).populate('wishlist');
+        const profile = await UserModel.findById(customerId).populate('wishlist');
+        console.log(profile,"profile");
         if(profile){
             let wishlist = profile.wishlist
             if(wishlist.length>0){

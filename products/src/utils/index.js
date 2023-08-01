@@ -98,7 +98,7 @@ export const subscribeMessage = async (channel, service, binding_key) =>{
     channel.bindQueue(appQueue.queue, configurations.EXCHANGE_NAME, binding_key);
 
     channel.consume(appQueue.queue,data =>{
-      console.log('received data');
+      console.log('received data from product');
       console.log(data.content.toString());
       channel.ack(data);
     })

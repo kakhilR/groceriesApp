@@ -55,12 +55,13 @@ export class UserService {
     }
 
     async AddToWishList(userId, product){
-        const wishListItems = await this.repository.AddToWishList({userId, product});
+        console.log(product,"from customer addtowishlist product");
+        const wishListItems = await this.repository.AddWishList({userId, product});
         return FormateData(wishListItems);
     }
 
     async ManageCart(userId, product,qty,isRemove){
-        const cart = await this.repository.AddToCart(userId, product,qty,isRemove);
+        const cart = await this.repository.AddCartItem(userId, product,qty,isRemove);
         return FormateData(cart);
     }
 
@@ -80,6 +81,8 @@ export class UserService {
 
         switch(event){
             case 'ADD_TO_WISHLIST':
+                this.AddToWishList(userId,product)
+                break;
             case 'REMOVE_FROM_WISHLIST':
                 this.AddToWishList(userId,product)
                 break;

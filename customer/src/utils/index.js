@@ -71,7 +71,7 @@ export const createChannel = async () =>{
       channel.bindQueue(appQueue.queue, configurations.EXCHANGE_NAME, configurations.CUSTOMER_BINDING_KEY);
   
       channel.consume(appQueue.queue,data =>{
-        console.log('received data');
+        console.log('received data from customer');
         console.log(data.content.toString());
         // we are passing the string type data in this SubscribeEvent so stringify it in SubscribeEvent method
         service.SubscribeEvents(data.content.toString());
