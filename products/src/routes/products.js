@@ -4,7 +4,7 @@ import { ProductService } from '../services/index.js';
 import { publishMessage } from '../utils/index.js';
 
 
-export const productApiServices = (app, channel) => {
+export const      productApiServices = (app, channel) => {
     const service = new ProductService();
   
     app.post("/product/create", async (req, res, next) => {
