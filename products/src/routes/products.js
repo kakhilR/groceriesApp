@@ -69,7 +69,7 @@ export const      productApiServices = (app, channel) => {
       console.log('received data from wishlist');
       try{
         const {data} = await service.GetProductPayload(_id,{productId: req.body._id},'ADD_TO_WISHLIST')
-        console.log(data,"data")
+        console.log(JSON.stringify(data),"data")
         // PublishUserEvent(data);
         publishMessage(channel, configurations.CUSTOMER_BINDING_KEY, JSON.stringify(data));
     

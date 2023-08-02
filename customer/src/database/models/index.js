@@ -1,3 +1,3 @@
 export * from './Address.js';
-export * from './User.js';
+export * from './Customer.js';
 

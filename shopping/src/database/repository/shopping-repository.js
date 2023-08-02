@@ -1,5 +1,6 @@
+import { v4 as uuidv4 } from 'uuid';
 import { CartModel, OrderModel } from '../models/index.js';
-// const { v4: uuidv4 } = require('uuid');
+uuidv4();
 
 //Dealing with data base operations
 export class ShoppingRepository {
@@ -29,7 +30,7 @@ export class ShoppingRepository {
             // return await CartModel.deleteMany();
  
             const cart = await CartModel.findOne({ customerId: customerId })
-
+            console.log(cart,"from addcartitem")
             const { _id } = item;
 
             if(cart){
@@ -49,7 +50,7 @@ export class ShoppingRepository {
                              }else{
                                item.unit = qty;
                             }
-                             isExist = true;
+                            isExist = true;
                         }
                     });
                 } 
@@ -78,10 +79,11 @@ export class ShoppingRepository {
         //required to verify payment through TxnId
 
         const cart = await CartModel.findOne({ customerId: customerId })
+        console.log(cart,"cart")
 
-        if(cart){         
+        if(cart){
             
-            let amount = 0;   
+            let amount = 0;
 
             let cartItems = cart.items;
 
@@ -89,7 +91,7 @@ export class ShoppingRepository {
                 //process Order
                 
                 cartItems.map(item => {
-                    amount += parseInt(item.product.price) *  parseInt(item.unit);   
+                    amount += parseInt(item.product.price) *  parseInt(item.unit);
                 });
     
                 const orderId = uuidv4();
@@ -109,7 +111,7 @@ export class ShoppingRepository {
                 return orderResult;
             }
         }
-        return {}
+        return {message:"cart not found"};
     }
 
 }

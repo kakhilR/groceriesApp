@@ -15,6 +15,7 @@ export const shopping = (app, channel) =>{
         const { data } = await service.PlaceOrder({_id,txnNumber});
 
         const payload = await service.GetOrderPayload(_id, data,'CREATE_ORDER');
+        console.log(payload,"payload")
 
         // PublishUserEvent(payload);
         publishMessage(channel, configurations.CUSTOMER_BINDING_KEY, JSON.stringify(payload));

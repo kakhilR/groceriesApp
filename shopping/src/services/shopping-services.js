@@ -20,11 +20,11 @@ export class ShoppingService {
         const { _id, txnNumber } = userInput
 
         const orderResult = await this.repository.CreateNewOrder(_id, txnNumber);
-        
+        console.log(orderResult,"order result")
         return FormateData(orderResult);
     }
 
-    async GetOrders(userId){
+    async GetOrders(customerId){
         
         const orders = await this.repository.Orders(customerId);
         return FormateData(orders)
@@ -35,18 +35,18 @@ export class ShoppingService {
         return FormateData(orders)
     }
 
-    async ManageCart(userId, item,qty, isRemove){
+    async ManageCart(customerId, item,qty, isRemove){
 
-        const cartResult = await this.repository.AddCartItem(userId,item,qty, isRemove);
+        const cartResult = await this.repository.AddCartItem(customerId,item,qty, isRemove);
         return FormateData(cartResult);
     }
 
-    async GetOrderPayload(userId,order,event){
+    async GetOrderPayload(customerId,order,event){
 
         if(order){
              const payload = {
                 event: event,
-                data: { userId, order }
+                data: { customerId, order }
             };
  
              return payload
@@ -61,14 +61,14 @@ export class ShoppingService {
     async SubscribeEvents(payload){
         payload = JSON.parse(payload)
         const { event, data } = payload;
-        const { userId, product, qty } = data;
+        const { customerId, product, qty } = data;
         
         switch(event){
             case 'ADD_TO_CART':
-                this.ManageCart(userId,product, qty, false);
+                this.ManageCart(customerId,product, qty, false);
                 break;
             case 'REMOVE_FROM_CART':
-                this.ManageCart(userId,product, qty, true);
+                this.ManageCart(customerId,product, qty, true);
                 break;
             default:
                 break;

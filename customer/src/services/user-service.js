@@ -49,24 +49,25 @@ export class UserService {
         return FormateData({msg:'Error'});
     }
 
-    async GetWishList(userId){
-        const wishListItems = await this.repository.WishList({userId});
+    async GetWishList(customerId){
+        const wishListItems = await this.repository.WishList({customerId});
         return FormateData(wishListItems);
     }
 
-    async AddToWishList(userId, product){
+    async AddToWishList(customerId, product){
         console.log(product,"from customer addtowishlist product");
-        const wishListItems = await this.repository.AddWishList({userId, product});
+        const wishListItems = await this.repository.AddWishList({customerId, product});
         return FormateData(wishListItems);
     }
 
-    async ManageCart(userId, product,qty,isRemove){
-        const cart = await this.repository.AddCartItem(userId, product,qty,isRemove);
+    async ManageCart(customerId, product,qty,isRemove){
+        const cart = await this.repository.AddCartItem(customerId, product,qty,isRemove);
         return FormateData(cart);
     }
 
-    async ManageOrder(userId, order){
-        const _order = await this.repository.AddOrderToProfile(userId, order);
+    async ManageOrder(customerId, order){
+        console.log(order,"order from ")
+        const _order = await this.repository.AddOrderToProfile(customerId, order);
         return FormateData(_order);
     }
 
@@ -77,23 +78,23 @@ export class UserService {
         payload = JSON.parse(payload);
         const {event, data} = payload;
 
-        const { userId, product, order, qty } = data;
+        const { customerId, product, order, qty } = data;
 
         switch(event){
             case 'ADD_TO_WISHLIST':
-                this.AddToWishList(userId,product)
+                this.AddToWishList(customerId,product)
                 break;
             case 'REMOVE_FROM_WISHLIST':
-                this.AddToWishList(userId,product)
+                this.AddToWishList(customerId,product)
                 break;
             case 'ADD_TO_CART':
-                this.ManageCart(userId,product,qty,false);
+                this.ManageCart(customerId,product,qty,false);
                 break;
             case 'REMOVE_FROM_CART':
-                this.ManagerCart(userId,product,qty,true);
+                this.ManagerCart(customerId,product,qty,true);
                 break;
             case 'CREATE_ORDER':
-                this.ManageOrder(userId,order);
+                this.ManageOrder(customerId,order);
                 break;
             case 'TEST':
                 console.log("from subscriber events");

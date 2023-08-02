@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 const Schema = mongoose.Schema
 
-const UserSchema = new Schema({
+const CustomerSchema = new Schema({
     email: String,
     password: String,
     salt:String,
@@ -39,4 +39,4 @@ const UserSchema = new Schema({
     ]
 },{timestamps:true});
 
-export const UserModel = mongoose.model('user',UserSchema);
+export const CustomerModel = mongoose.model('customer',CustomerSchema);

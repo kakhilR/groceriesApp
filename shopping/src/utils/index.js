@@ -82,8 +82,8 @@ export const subscribeMessage = async (channel, service) =>{
 
     channel.consume(appQueue.queue,data =>{
       console.log('received data is shopping');
-      service.SubscribeEvents(data.content.toString())
       console.log(data.content.toString());
+      service.SubscribeEvents(data.content.toString())
       channel.ack(data);
     })
   }catch(e){

@@ -42,6 +42,7 @@ export const userApiServices = (app, channel)=>{
         const { _id } = req.user;
         console.log(_id,"from customer")
         const { data } = await service.GetProfile({ _id });
+        console.log(data,"data profile")
         res.json(data);
     });
      
