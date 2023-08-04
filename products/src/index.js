@@ -17,7 +17,6 @@ const StartServer = async ()=>{
     const channel = await createChannel();
 
     await expressApp(app, channel);
-    console.log("from here");
     
     // app.use('/', (req, res)=>{
     //     return res.send("Hello World products")
@@ -26,7 +25,7 @@ const StartServer = async ()=>{
     app.listen(8002, ()=>{
         console.log('listening on 8002 products')
     }).on('error',(err)=>{
-        console.log(err);
+        console.log(err,"error from products");
         process.exit();
     });
 }

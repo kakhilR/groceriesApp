@@ -30,7 +30,7 @@ export class ShoppingRepository {
             // return await CartModel.deleteMany();
  
             const cart = await CartModel.findOne({ customerId: customerId })
-            console.log(cart,"from addcartitem")
+            // console.log(cart,"from addcartitem")
             const { _id } = item;
 
             if(cart){
@@ -79,7 +79,7 @@ export class ShoppingRepository {
         //required to verify payment through TxnId
 
         const cart = await CartModel.findOne({ customerId: customerId })
-        console.log(cart,"cart")
+        // console.log(cart,"cart")
 
         if(cart){
             

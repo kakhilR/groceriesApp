@@ -47,13 +47,13 @@ export class ProductService {
     async GetProductPayload(customerId,{ productId, qty },event){
 
         const product = await this.repository.FindById(productId);
-        console.log(product,"from getproductpayload")
+        // console.log(product,"from getproductpayload")
         try{
             const payload = {
                 event: event,
                 data: { customerId, product, qty}
             };
-            console.log(payload,"payload")
+            // console.log(payload,"payload")
              return FormateData(payload)
         }catch(e){
             return e;

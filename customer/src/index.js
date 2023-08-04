@@ -27,7 +27,7 @@ const StartServer = async ()=>{
     app.listen(8001, ()=>{
         console.log('listening on 8001 customer')
     }).on('error',(err)=>{
-        console.log(err);
+        console.log(err,"error from customer");
         process.exit();
     });
 }

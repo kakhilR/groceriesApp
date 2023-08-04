@@ -14,14 +14,17 @@ export class UserService {
         const existingUser = await this.repository.FindUser({ email });
 
         if(existingUser){
-            const validPassword = await   ValidatePassword(password, existingUser.password,existingUser.salt);
+            const validPassword = await ValidatePassword(password, existingUser.password);
+            console.log(validPassword,"validate password")
             if(validPassword){
                 const token = await GenerateSignature({ email:existingUser.email, _id: existingUser._id})
-                console.log(token,"token");
+                // console.log(token,"token");
                 return FormateData({id:existingUser._id,token});
+            }else{
+                return FormateData({message:"please enter a valid email address or password"});
             }
         }
-        return FormateData(null);
+        return FormateData({message:"no user with email address"});
     }
 
     async SignUp(userInput){
@@ -55,7 +58,7 @@ export class UserService {
     }
 
     async AddToWishList(customerId, product){
-        console.log(product,"from customer addtowishlist product");
+        // console.log(product,"from customer addtowishlist product");
         const wishListItems = await this.repository.AddWishList({customerId, product});
         return FormateData(wishListItems);
     }
@@ -66,7 +69,7 @@ export class UserService {
     }
 
     async ManageOrder(customerId, order){
-        console.log(order,"order from ")
+        // console.log(order,"order from ")
         const _order = await this.repository.AddOrderToProfile(customerId, order);
         return FormateData(_order);
     }

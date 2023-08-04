@@ -1,27 +1,32 @@
 import amqplib from 'amqplib';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 import { configurations } from '../config/index.js';
 
 
 export const GenerateSalt = async ()=>{
-    return await bcrypt.genSalt();
+    return await bcrypt.genSaltSync(10);
 }
 
 export const GeneratePassword = async (password,salt)=>{
     return await bcrypt.hash(password,salt);
 }
 
-export const ValidatePassword = async ( enteredPassword,savedPassword,salt)=>{
-    return (await GeneratePassword(enteredPassword,salt)===savedPassword);
+export const ValidatePassword = async ( enteredPassword, savedPassword)=>{
+    const isValidPass = await bcrypt.compareSync(enteredPassword,savedPassword);
+    console.log(isValidPass,"isValidPass")
+    if(isValidPass){
+      return true;
+    }
+    return false;
 }
 
 export const GenerateSignature = async (payload) => {
     try {
       return await jwt.sign(payload, configurations.APP_SECRET, { expiresIn: "30d" });
     } catch (error) {
-      console.log(error);
+      console.log(error,"from Generate signatures");
       return error;
     }
   };
@@ -29,12 +34,12 @@ export const GenerateSignature = async (payload) => {
 export const validateSignature = async (req) => {
     try{
         const signature = req.get("Authorization");
-        console.log(signature);
+        // console.log(signature);
         const payload = await jwt.verify(signature.split(" ")[1], configurations.APP_SECRET);
         req.user = payload;
         return true;
     }catch(error){
-        console.log(error);
+        console.log(error,"from validate signature catch eror");
         return false;
     }
 }

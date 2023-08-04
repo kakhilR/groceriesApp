@@ -25,7 +25,7 @@ export const GenerateSignature = async (payload) => {
   try {
     return await jwt.sign(payload, configurations.APP_SECRET, { expiresIn: "30d" });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return error;
   }
 };
@@ -33,12 +33,12 @@ export const GenerateSignature = async (payload) => {
 export const ValidateSignature = async (req) => {
   try {
     const signature = req.get("Authorization");
-    console.log(signature);
+    // console.log(signature);
     const payload = await jwt.verify(signature.split(" ")[1], configurations.APP_SECRET);
     req.user = payload;
     return true;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return false;
   }
 };

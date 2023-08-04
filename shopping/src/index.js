@@ -19,7 +19,7 @@ const StartServer = async ()=>{
     app.listen(8003, ()=>{
         console.log('listening on 8003 shopping service')
     }).on('error',(err)=>{
-        console.log(err);
+        console.log(err,"error from shopping service");
         process.exit();
     });
 }

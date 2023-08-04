@@ -56,7 +56,7 @@ export const      productApiServices = (app, channel) => {
     app.get("/",userAuth, async (req, res, next) => {
       //check validation
       try {
-        console.log("from get product")
+        // console.log("from get product")
         const { data } = await service.GetProducts();
         return res.status(200).json(data);
       } catch (error) {
@@ -66,10 +66,10 @@ export const      productApiServices = (app, channel) => {
 
     app.put('/wishlist', userAuth, async (req,res,next)=>{
       const { _id } = req.user;
-      console.log('received data from wishlist');
+      // console.log('received data from wishlist');
       try{
         const {data} = await service.GetProductPayload(_id,{productId: req.body._id},'ADD_TO_WISHLIST')
-        console.log(JSON.stringify(data),"data")
+        // console.log(JSON.stringify(data),"data")
         // PublishUserEvent(data);
         publishMessage(channel, configurations.CUSTOMER_BINDING_KEY, JSON.stringify(data));
     

@@ -20,7 +20,7 @@ export class ShoppingService {
         const { _id, txnNumber } = userInput
 
         const orderResult = await this.repository.CreateNewOrder(_id, txnNumber);
-        console.log(orderResult,"order result")
+        // console.log(orderResult,"order result")
         return FormateData(orderResult);
     }
 

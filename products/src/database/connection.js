@@ -10,7 +10,7 @@ export const databaseConnection = async()=>{
         console.log(' DB connected');
     }catch(error){
         console.log("========Error=====");
-        console.log(error);
+        console.log(error,"error from products database");
         process.exit(1);
     }
 }

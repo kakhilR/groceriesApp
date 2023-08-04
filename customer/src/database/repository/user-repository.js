@@ -28,10 +28,10 @@ export class UserRepository{
     // }
 
     async FindUserById({id}){
-        console.log(id,"existing user id")
+        // console.log(id,"existing user id")
         const {_id} =id;
         const existingUser = await CustomerModel.findById(_id).populate('address');
-        console.log(existingUser,"existing user")
+        // console.log(existingUser,"existing user")
         return existingUser;
     }
      async WishList(customerId){
@@ -103,9 +103,9 @@ export class UserRepository{
     }
 
     async AddOrderToProfile(customerId,order){
-        console.log(order,"order")
+        // console.log(order,"order")
         const profile = await CustomerModel.findById(customerId);
-        console.log(profile,"from add order to profile")
+        // console.log(profile,"from add order to profile")
 
         if(profile){
             if(profile.order == undefined){
